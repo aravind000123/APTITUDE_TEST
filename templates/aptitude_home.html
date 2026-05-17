@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="aptitude test, aptitude practice, reasoning questions, placement preparation">
+    <link rel="icon" href="/static/FullLogo_Transparent_NoBuffer.png">
+    <title>Aptitude Practice Tests for Placements and Exams</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container{
+            border:2px solid green;
+            font-size: 130%;
+            border-radius: 5px;
+            padding-bottom: 10px;
+        }
+
+        .que_options{
+            margin-top: 4%;
+            margin-left: 7%;
+            margin-right: 7%;
+        }
+
+        .options{
+            margin-bottom: 4%;
+            margin-left:5%;
+        }
+
+        .options label {
+            display: block;
+            margin-top: 2%;
+        }
+
+        .submit_class{
+            width:100%;
+            position:sticky;
+            bottom: 1px;
+            height: 8vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+
+        .submit_class button{
+            height: 100%;
+            padding: 10px;
+            font-size: 25px;
+            border-radius: 5px;
+            background-color: blue;
+            color:white;
+            transition:all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .submit_class button:hover{
+            background-color: yellow;
+            color:black;
+            transform:translateY(-5px);
+        }
+
+        .explanation{
+            border:2px solid blue;
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .real_value{
+            display: none;
+        }
+        .marks_div{
+            width:50%;
+            height:50%;
+            /* background-color: rgb(116, 239, 116); */
+            display: none;
+            position:fixed;
+            bottom:25%;
+            left:25%;
+            z-index: 4;
+            font-size: 120%;
+            border-radius: 5%;
+            backdrop-filter: blur(10px);
+            border:2px solid;
+            background-color: aquamarine;
+        }
+        .marks_div button{
+            position:absolute;
+            top:20px;
+            width:10%;
+            height: 10%;
+            right:19px;
+            background-color: red;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<form>
+    <div class="container">
+        <div class="marks_div" id="marks_div"><button type="button" onclick="cancel()">X</button><h1 id="marks_show"></h1></div>
+        {% for x in values %}
+        <div class="que_options">
+
+            <div class="question">
+                <strong>{{loop.index}}. {{x[0]}}</strong>
+            </div>
+
+            <div class="options">
+                <label><input type="radio" name="q{{loop.index}}" value="A"> A) {{x[1]}}</label>
+                <label><input type="radio" name="q{{loop.index}}" value="B"> B) {{x[2]}}</label>
+                <label><input type="radio" name="q{{loop.index}}" value="C"> C) {{x[3]}}</label>
+                <label><input type="radio" name="q{{loop.index}}" value="D"> D) {{x[4]}}</label>
+
+                <span class="real_value" value="{{x[5]}}">{{x[5]}}</span>
+            </div>
+
+            <div class="explanation">
+                <strong>Answer:</strong> {{x[5]}} <br>
+                <strong>Explanation:</strong> {{x[6]}}
+            </div>
+
+            <hr>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="submit_class">
+        <button type="button" onclick="showAnswers()">SUBMIT</button>
+    </div>
+</form>
+
+<script>
+
+        function showAnswers() {
+            let marks=0
+        let question = document.getElementsByClassName("que_options");
+
+        for (let x = 0; x < question.length; x++) {
+
+            let q = question[x];
+
+            let explanation = q.querySelector(".explanation");
+            explanation.style.display = "block";
+
+            let correct_answer =
+                q.querySelector(".real_value").innerText.trim();
+
+            let selected =
+                q.querySelector("input[type=radio]:checked");
+
+            let labels = q.querySelectorAll("label");
+
+            labels.forEach(label => {
+
+                let input = label.querySelector("input");
+
+                if(selected && input.value === correct_answer && selected.value === correct_answer){
+                    label.style.backgroundColor="green";
+                    marks+=1;
+                }            
+                
+                else if (input.value === correct_answer) {
+
+                    label.style.backgroundColor = "yellow";
+                    label.style.color = "black";
+                }
+
+                else if (selected &&
+                    input.value === selected.value) {
+
+                    label.style.backgroundColor = "red";
+                    label.style.color = "white";
+                }
+            });
+        }
+        document.getElementById("marks_show").innerHTML=" Your score is : "+marks+" / 200 <br> Percentage : "+(marks/200)*100 +"%";
+        document.getElementById("marks_div").style.display="flex";
+
+    }
+    function cancel(){
+        document.getElementById("marks_div").style.display="none";
+    }
+
+    </script>
+</body>
+</html>
